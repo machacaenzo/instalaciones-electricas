@@ -1,0 +1,111 @@
+﻿@model WebMVC_Instalaciones.Models.UsuarioRegistro
+
+@{
+    ViewData["Title"] = "Nuevo Usuario";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+
+        <div class="glass-panel glow">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="title-cyber">ALTA DE PERSONAL</h2>
+                    <p class="subtitle-cyber">REGISTRO ADMINISTRATIVO</p>
+                </div>
+                <a asp-action="Usuarios" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                    <i class="bi bi-arrow-left"></i> VOLVER
+                </a>
+            </div>
+
+            <!-- Alerta de error -->
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger bg-transparent border-danger text-danger text-center small mb-4">
+                    <i class="bi bi-exclamation-triangle me-2"></i> @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="CrearUsuario" method="post">
+
+                <!-- 1. SELECCIÓN DE ROL -->
+                <div class="mb-3">
+                    <span class="input-label">ROL ASIGNADO</span>
+                    <div class="input-group-cyber" style="border-color: var(--neon-main);">
+                        <i class="bi bi-shield-lock text-warning"></i>
+                        <select asp-for="IdRol" class="bg-transparent border-0 text-white w-100" style="outline:none; cursor:pointer;">
+                            <option value="3" class="text-dark">INSTALADOR (Técnico)</option>
+                            <option value="1" class="text-dark">ADMINISTRADOR</option>
+                            <option value="2" class="text-dark">CLIENTE</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 2. DATOS PERSONALES -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <span class="input-label">NOMBRE COMPLETO</span>
+                        <div class="input-group-cyber">
+                            <i class="bi bi-person-vcard"></i>
+                            <input asp-for="NombreCompleto" placeholder="Ej: Roberto Gomez" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <span class="input-label">CELULAR</span>
+                        <div class="input-group-cyber">
+                            <i class="bi bi-telephone"></i>
+                            <input asp-for="Celular" placeholder="+54..." autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. LOGIN -->
+                <div class="mb-3">
+                    <span class="input-label">CORREO (USUARIO)</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-envelope"></i>
+                        <input asp-for="Correo" placeholder="tecnico@empresa.com" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Correo" class="text-danger small"></span>
+                </div>
+
+                <!-- 4. CONTRASEÑA (Doble campo obligatorio por el modelo) -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <span class="input-label">CONTRASEÑA INICIAL</span>
+                        <div class="input-group-cyber">
+                            <i class="bi bi-key"></i>
+                            <input asp-for="Clave" type="password" placeholder="Ej: 123456" />
+                        </div>
+                        <span asp-validation-for="Clave" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <span class="input-label">CONFIRMAR</span>
+                        <div class="input-group-cyber">
+                            <i class="bi bi-check2-circle"></i>
+                            <input asp-for="ConfirmarClave" type="password" placeholder="Repetir clave" />
+                        </div>
+                        <span asp-validation-for="ConfirmarClave" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-neon mt-2">
+                    REGISTRAR USUARIO
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS DE VALIDACIÓN (Importante para que no recargue la página si hay error) -->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.5/localization/messages_es.min.js"></script>
+}

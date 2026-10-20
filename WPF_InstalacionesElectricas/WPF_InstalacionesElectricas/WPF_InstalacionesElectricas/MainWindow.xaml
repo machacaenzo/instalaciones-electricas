@@ -1,0 +1,136 @@
+﻿<Window x:Class="WPF_InstalacionesElectricas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_InstalacionesElectricas"
+        mc:Ignorable="d"
+        Title="Panel Técnico" 
+        Height="720" Width="1024" 
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="CanResizeWithGrip">
+
+    <!-- Grid Raíz: Necesario para ajustar márgenes al maximizar -->
+    <Grid x:Name="RootGrid">
+
+        <!-- 1. FONDO CON EFECTO BLUR -->
+        <Border x:Name="BackgroundBorder" CornerRadius="18" ClipToBounds="True">
+            <Grid>
+                <!-- Imagen de fondo (debe existir en tu carpeta) -->
+                <Image Source="/Imagenes/FondoLogin.jpeg" Stretch="UniformToFill">
+                    <Image.Effect>
+                        <BlurEffect Radius="20"/>
+                    </Image.Effect>
+                </Image>
+                <!-- Capa oscura semitransparente -->
+                <Rectangle Fill="{DynamicResource ColorFondo}" Opacity="0.85"/>
+            </Grid>
+        </Border>
+
+        <!-- 2. ESTRUCTURA PRINCIPAL (2 Columnas) -->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260"/>
+                <!-- Sidebar compacto -->
+                <ColumnDefinition Width="*"/>
+                <!-- Contenido -->
+            </Grid.ColumnDefinitions>
+
+            <!-- ================= SIDEBAR (IZQUIERDA) ================= -->
+            <Border Grid.Column="0" Style="{StaticResource GlassPanel}" Margin="0,0,10,0" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Header -->
+                        <RowDefinition Height="*"/>
+                        <!-- Menú -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Footer -->
+                    </Grid.RowDefinitions>
+
+                    <!-- HEADER -->
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="SYSTEM STATUS" Style="{StaticResource TituloCyber}" Foreground="{DynamicResource NeonBrush}" HorizontalAlignment="Center" FontSize="22"/>
+                        <TextBlock Text="PANEL TÉCNICO" Style="{StaticResource SubtituloCyber}" HorizontalAlignment="Center" Margin="0,5,0,20"/>
+                        <Separator Background="{DynamicResource VidrioBordeBrush}" Margin="0,0,0,20"/>
+                    </StackPanel>
+
+                    <!-- MENÚ (RadioButtons con estilo de Botón) -->
+                    <StackPanel Grid.Row="1">
+                        <!-- IsChecked="True" hace que arranque marcado en amarillo -->
+                        <RadioButton Content="Inicio" Tag="🏠" 
+                                     Style="{StaticResource MenuRadioBtn}" 
+                                     Click="btnPrincipal_Click" 
+                                     IsChecked="True"/>
+
+                        <RadioButton Content="Mis Tareas" Tag="📋" 
+                                     Style="{StaticResource MenuRadioBtn}" 
+                                     Click="btnTareas_Click"/>
+                        <RadioButton Content="Reportes" Tag="📊" 
+             Style="{StaticResource MenuRadioBtn}" 
+             Click="btnReportes_Click"/>
+                    </StackPanel>
+
+                    <!-- FOOTER (PERFIL) -->
+                    <StackPanel Grid.Row="2">
+                        <Separator Background="{DynamicResource VidrioBordeBrush}" Margin="0,20"/>
+
+                        <!-- FOTO DE PERFIL -->
+                        <Grid HorizontalAlignment="Center" Margin="0,0,0,10">
+                            <!-- El estilo ProfileImageEllipse maneja la foto o el user.png automáticamente -->
+                            <Ellipse Style="{StaticResource ProfileImageEllipse}"/>
+
+                            <!-- Indicador Online (Puntito Verde/Amarillo) -->
+                            <Border Width="12" Height="12" Background="{DynamicResource NeonBrush}" CornerRadius="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" BorderBrush="Black" BorderThickness="2"/>
+                        </Grid>
+
+                        <TextBlock Text="{Binding NombreCompleto}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding NombreRol}" Foreground="{DynamicResource TextoGris}" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,15"/>
+
+                        <!-- Botón Cerrar Sesión -->
+                        <Button Content="CERRAR SESIÓN" Click="btnCerrar_Click" Style="{StaticResource LogoutBtn}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ================= CONTENIDO (DERECHA) ================= -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <!-- Barra Título -->
+                    <RowDefinition Height="*"/>
+                    <!-- Frame -->
+                </Grid.RowDefinitions>
+
+                <!-- BARRA DE TÍTULO (Para mover y cerrar ventana) -->
+                <Grid Grid.Row="0" Background="Transparent" MouseLeftButtonDown="TitleBar_MouseDown">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-5,-5,0">
+                        <Button Content="─" Click="btnMinimizar_Click" Style="{StaticResource WindowControlBtn}"/>
+                        <Button Content="▢" Click="btnMaximizar_Click" Style="{StaticResource WindowControlBtn}"/>
+                        <Button Content="✕" Click="btnSalirApp_Click" Style="{StaticResource WindowCloseBtn}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ÁREA DE TRABAJO -->
+                <Border Grid.Row="1" Style="{StaticResource GlassPanel}">
+                    <Grid>
+                        <!-- PANEL BIENVENIDA (Se oculta al ir a Tareas) -->
+                        <Grid x:Name="WelcomePanel" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel>
+                                <TextBlock Text="ENERGÍA INTELIGENTE" Style="{StaticResource TituloCyber}" FontSize="30" HorizontalAlignment="Center"/>
+                                <TextBlock Text="PLATAFORMA DE GESTIÓN TÉCNICA" Style="{StaticResource SubtituloCyber}" HorizontalAlignment="Center" Margin="0,10,0,30"/>
+                                <TextBlock Text="Seleccione una opción del menú para comenzar." Foreground="{DynamicResource TextoGris}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- FRAME REAL (Aquí se cargan las páginas) -->
+                        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

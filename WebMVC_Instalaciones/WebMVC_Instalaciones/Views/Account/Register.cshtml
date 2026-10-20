@@ -1,0 +1,132 @@
+﻿@model WebMVC_Instalaciones.Models.UsuarioRegistro
+
+@{
+    ViewData["Title"] = "Registro de Usuario";
+    Layout = null; /* Sin menú de navegación */
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - ElecService</title>
+
+    <!-- CSS GLOBAL Y LIBRERÍAS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Tu CSS Personalizado -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center vh-100 py-4">
+
+        <!-- TARJETA (Un poco más ancha que el login porque tiene más datos) -->
+        <div class="glass-panel glow" style="width: 450px;">
+
+            <div class="text-center mb-4">
+                <h2 class="title-cyber">NUEVA CUENTA</h2>
+                <p class="subtitle-cyber">REGISTRO DE OPERADOR / CLIENTE</p>
+            </div>
+
+            <!-- Alerta de Error del Backend -->
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger py-2 px-2 mb-4 text-center small border-0"
+                     style="background: rgba(255, 68, 68, 0.1); color: #ff6b6b; border: 1px solid #ff4444;">
+                    <i class="bi bi-x-circle me-1"></i> @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="Register" method="post">
+
+                <!-- 1. NOMBRE COMPLETO -->
+                <div class="mb-1">
+                    <span class="input-label">NOMBRE Y APELLIDO</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-person-vcard"></i>
+                        <input asp-for="NombreCompleto" placeholder="Juan Perez" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span asp-validation-for="NombreCompleto" class="text-danger fw-bold small" style="font-size:0.75rem; text-shadow: 0 1px 2px black;"></span>
+                </div>
+
+                <!-- 2. CORREO -->
+                <div class="mb-1">
+                    <span class="input-label">CORREO ELECTRÓNICO</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-envelope"></i>
+                        <input asp-for="Correo" placeholder="juan@ejemplo.com" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span asp-validation-for="Correo" class="text-danger fw-bold small" style="font-size:0.75rem; text-shadow: 0 1px 2px black;"></span>
+                </div>
+
+                <!-- 3. CELULAR (Opcional) -->
+                <div class="mb-1">
+                    <span class="input-label">CELULAR (OPCIONAL)</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-telephone"></i>
+                        <input asp-for="Celular" placeholder="+54 9 11..." />
+                    </div>
+                </div>
+                <div class="mb-3"></div> <!-- Espaciador -->
+                <!-- 4. CONTRASEÑA -->
+                <div class="row">
+                    <div class="col-md-6 mb-1">
+                        <span class="input-label">CONTRASEÑA</span>
+                        <div class="input-group-cyber">
+                            <i class="bi bi-key"></i>
+                            <input asp-for="Clave" type="password" placeholder="••••••" />
+                        </div>
+                        <div class="mb-2">
+                            <span asp-validation-for="Clave" class="text-danger fw-bold small" style="font-size:0.7rem; text-shadow: 0 1px 2px black;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <span class="input-label">CONFIRMAR</span>
+                        <div class="input-group-cyber">
+                            <i class="bi bi-check2-circle"></i>
+                            <input asp-for="ConfirmarClave" type="password" placeholder="••••••" />
+                        </div>
+                        <div class="mb-2">
+                            <span asp-validation-for="ConfirmarClave" class="text-danger fw-bold small" style="font-size:0.7rem; text-shadow: 0 1px 2px black;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTÓN -->
+                <button type="submit" class="btn-neon mt-3">
+                    CREAR CUENTA
+                </button>
+
+            </form>
+
+            <!-- FOOTER -->
+            <div class="text-center mt-4 pt-3 border-top border-secondary border-opacity-25">
+                <span class="text-white-50 small me-2">¿Ya estás registrado?</span>
+                <a asp-action="Login" class="link-cyber">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- VALIDACIONES FRONTEND + TRADUCCIÓN AL ESPAÑOL -->
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.5/localization/messages_es.min.js"></script>
+
+</body>
+</html>

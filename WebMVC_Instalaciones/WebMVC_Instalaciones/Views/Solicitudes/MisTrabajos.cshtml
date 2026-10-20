@@ -1,0 +1,84 @@
+﻿@model IEnumerable<WebMVC_Instalaciones.Models.Solicitud>
+@{
+    ViewData["Title"] = "Hoja de Ruta";
+}
+
+<h2 class="title-cyber">HOJA DE RUTA</h2>
+<p class="subtitle-cyber mb-4">CONSULTA DE ÓRDENES ASIGNADAS</p>
+
+@if (!Model.Any())
+{
+    <!-- ESTADO VACÍO -->
+    <div class="glass-panel text-center py-5">
+        <i class="bi bi-calendar-check text-secondary" style="font-size: 3rem;"></i>
+        <h4 class="text-white mt-3">Sin asignaciones</h4>
+        <p class="text-white-50">No tenés trabajos pendientes en tu agenda web.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6">
+                <!-- Tarjeta solo lectura -->
+                <div class="glass-panel h-100 p-4 position-relative" style="border-left: 4px solid var(--neon-main);">
+
+                    <!-- ENCABEZADO: ESTADO DINÁMICO -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        @if (item.IdEstadoSolicitud == 2)
+                        {
+                            <!-- ID 2 = ASIGNADA (Recién recibida) -->
+                            <span class="badge bg-primary text-white border border-primary shadow-sm">NUEVA ASIGNACIÓN</span>
+                        }
+                        else if (item.IdEstadoSolicitud == 3)
+                        {
+                            <!-- ID 3 = EN PROCESO (Ya iniciada en WPF) -->
+                            <span class="badge bg-info text-dark border border-info animate-pulse">EN CURSO...</span>
+                        }
+                        else if (item.IdEstadoSolicitud == 4)
+                        {
+                            <!-- ID 4 = FINALIZADA -->
+                            <span class="badge bg-success text-white border border-success">FINALIZADA</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary text-white border border-secondary">OTRO</span>
+                        }
+
+                        <small class="text-white-50 font-monospace">ORDEN #@item.Id</small>
+                    </div>
+
+                    <!-- DIRECCIÓN -->
+                    <h5 class="text-white fw-bold mb-1">
+                        <i class="bi bi-geo-alt-fill text-danger me-2"></i>@item.Direccion
+                    </h5>
+                    <!-- FECHA -->
+                    <div class="text-white-50 small mb-3">
+                        <i class="bi bi-clock me-1"></i> @item.FechaDeseada.ToShortDateString()
+                    </div>
+
+                    <!-- DESCRIPCIÓN -->
+                    <div class="p-3 rounded mb-3" style="background: rgba(255,255,255,0.05);">
+                        <span class="input-label mb-1 text-warning" style="font-size: 0.65rem;">TAREA A REALIZAR:</span>
+                        <p class="text-white mb-0 small">@item.Descripcion</p>
+                    </div>
+
+                    <!-- DATOS CLIENTE -->
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-person-circle text-secondary"></i>
+                        <span class="text-white small">Cliente: @(item.Cliente?.NombreCompleto ?? "Desconocido")</span>
+                    </div>
+
+                    <!-- MENSAJE WPF (Recordatorio de la consigna) -->
+                    <div class="mt-3 pt-2 border-top border-secondary border-opacity-25 text-center">
+                        <small class="text-white-50 fst-italic" style="font-size: 0.75rem;">
+                            <i class="bi bi-laptop me-1"></i> Para cambiar el estado, usá la App de Escritorio.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+

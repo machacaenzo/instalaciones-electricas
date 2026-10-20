@@ -1,0 +1,95 @@
+﻿<Window x:Class="WPF_InstalacionesElectricas.Paginas.DetalleSolicitud"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Detalles de Solicitud" Height="600" Width="900"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <!-- Grid Principal con Sombra -->
+    <Grid Margin="20">
+        <Border Style="{StaticResource GlassPanel}" Background="#E60A0A0A">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Header -->
+                    <RowDefinition Height="*"/>
+                    <!-- Contenido -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Footer -->
+                </Grid.RowDefinitions>
+
+                <!-- 1. ENCABEZADO -->
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="FICHA TÉCNICA" Style="{StaticResource TituloCyber}" HorizontalAlignment="Left"/>
+                        <TextBlock Text="DETALLE DE SOLICITUD DE SERVICIO" Style="{StaticResource SubtituloCyber}" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <!-- Botón Cerrar -->
+                    <Button Content="✕" Click="btnCerrar_Click" Style="{StaticResource WindowCloseBtn}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                </Grid>
+
+                <!-- 2. CONTENIDO (2 COLUMNAS) -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <!-- Datos -->
+                        <ColumnDefinition Width="20"/>
+                        <!-- Espacio -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- Foto -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- COLUMNA IZQUIERDA: DATOS -->
+                    <StackPanel Grid.Column="0">
+                        <!-- Cliente -->
+                        <TextBlock Text="CLIENTE" Foreground="{DynamicResource NeonBrush}" FontWeight="Bold" FontSize="12"/>
+                        <TextBox Text="{Binding Cliente.NombreCompleto}" Style="{StaticResource InputCyber}" IsReadOnly="True" Margin="0,5,0,15"/>
+
+                        <!-- Dirección -->
+                        <TextBlock Text="DOMICILIO DE INSTALACIÓN" Foreground="{DynamicResource NeonBrush}" FontWeight="Bold" FontSize="12"/>
+                        <TextBox Text="{Binding Direccion}" Style="{StaticResource InputCyber}" IsReadOnly="True" Height="60" TextWrapping="Wrap" Margin="0,5,0,15"/>
+
+                        <!-- Fecha -->
+                        <TextBlock Text="FECHA PROGRAMADA" Foreground="{DynamicResource NeonBrush}" FontWeight="Bold" FontSize="12"/>
+                        <TextBox Text="{Binding FechaDeseada, StringFormat=dd/MM/yyyy}" Style="{StaticResource InputCyber}" IsReadOnly="True" Margin="0,5,0,15"/>
+
+                        <!-- Estado Actual -->
+                        <TextBlock Text="ESTADO ACTUAL" Foreground="{DynamicResource NeonBrush}" FontWeight="Bold" FontSize="12"/>
+                        <Border Background="#333" CornerRadius="8" Padding="10" Margin="0,5,0,0">
+                            <TextBlock Text="{Binding Estado.Descripcion}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- COLUMNA DERECHA: FOTO -->
+                    <Border Grid.Column="2" CornerRadius="12" ClipToBounds="True" Background="#1AFFFFFF" BorderBrush="{DynamicResource VidrioBordeBrush}" BorderThickness="1">
+                        <Grid>
+                            <!-- A. IMAGEN REAL (Binding al Bitmap del Modelo) -->
+                            <Image x:Name="imgEvidencia" 
+                                   Source="{Binding FotoEvidenciaBitmap}" 
+                                   Stretch="Uniform" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                            <!-- B. PLACEHOLDER (Se muestra si no hay foto) -->
+                            <StackPanel x:Name="pnlNoFoto" 
+                                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        Visibility="Collapsed">
+                                <!-- Por defecto oculto, lo manejamos en C# -->
+                                <TextBlock Text="📷" FontSize="40" HorizontalAlignment="Center" Foreground="#555"/>
+                                <TextBlock Text="SIN EVIDENCIA FOTOGRÁFICA" 
+                                           Foreground="#555" FontWeight="Bold" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- 3. FOOTER -->
+                <Button Grid.Row="2" Content="CERRAR VISOR" Click="btnCerrar_Click" 
+                        Style="{StaticResource BtnNeon}" Width="200" HorizontalAlignment="Right" Margin="0,20,0,0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

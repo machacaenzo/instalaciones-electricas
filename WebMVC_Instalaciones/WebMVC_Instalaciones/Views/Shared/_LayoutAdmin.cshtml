@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADMIN - System Status</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div class="admin-wrapper">
+
+        <!-- SIDEBAR FLOTANTE (Con Hamburguesa) -->
+        <nav class="sidebar navbar-expand-lg">
+
+            <div class="sidebar-header d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="sidebar-title">ADMINISTRACIÓN</div>
+                    <small class="text-white-50" style="letter-spacing: 2px;">PANEL DE CONTROL</small>
+                </div>
+
+                <!-- BOTÓN HAMBURGUESA (Solo móvil) -->
+                <button class="navbar-toggler border-0 text-white d-lg-none" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
+                        aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list" style="font-size: 2rem; color: var(--neon-main);"></i>
+                </button>
+            </div>
+
+            <!-- MENÚ COLAPSABLE -->
+            <div class="collapse navbar-collapse d-lg-flex flex-column" id="sidebarMenu">
+
+                <div class="sidebar-menu w-100 mt-3 mt-lg-0">
+                    <!-- 1. RESUMEN -->
+                    <a asp-controller="Admin" asp-action="Dashboard"
+                       class="nav-link-admin @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <i class="bi bi-grid-1x2-fill"></i> Resumen
+                    </a>
+
+                    <!-- 2. SOLICITUDES -->
+                    <a asp-controller="Admin" asp-action="Solicitudes"
+                       class="nav-link-admin @(ViewContext.RouteData.Values["Action"]?.ToString() == "Solicitudes" ? "active" : "")">
+                        <i class="bi bi-list-task"></i> Solicitudes
+                    </a>
+
+                    <!-- 3. USUARIOS -->
+                    <a asp-controller="Admin" asp-action="Usuarios"
+                       class="nav-link-admin @(ViewContext.RouteData.Values["Action"]?.ToString() == "Usuarios" ? "active" : "")">
+                        <i class="bi bi-people-fill"></i> Usuarios
+                    </a>
+
+                    <!-- 4. REPORTES (NUEVO) -->
+                    <!-- Usamos "Controller" en la condición porque Reportes es un controlador aparte -->
+                    <a asp-controller="Reportes" asp-action="Index"
+                       class="nav-link-admin @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Reportes" ? "active" : "")">
+                        <i class="bi bi-bar-chart-fill"></i> Reportes
+                    </a>
+                </div>
+
+                <!-- FOOTER CON USUARIO Y FOTO -->
+                <div class="sidebar-footer w-100">
+                    <div class="d-flex align-items-center mb-3 px-2">
+
+                        <!-- FOTO DE PERFIL (Con borde neón) -->
+                        <!-- Usamos el Claim IdUsuario para pedir la foto correcta a la API -->
+                        <img src="https://localhost:7088/api/Usuarios/@User.FindFirst("IdUsuario")?.Value/foto"
+                             onerror="this.src='https://ui-avatars.com/api/?name=@User.Identity.Name&background=random&color=fff&size=64'"
+                             class="rounded-circle me-3 shadow"
+                             style="width: 45px; height: 45px; object-fit: cover; border: 2px solid var(--neon-main);"
+                             alt="Admin" />
+
+                        <div style="line-height: 1.2;">
+                            <div class="fw-bold text-white small">@User.Identity.Name</div>
+                            <div style="color: var(--neon-main); font-size: 0.65rem; letter-spacing: 1px;">● CONECTADO</div>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Account" asp-action="Logout" class="nav-link-admin text-danger justify-content-center" style="background: rgba(255,0,0,0.1);">
+                        <i class="bi bi-power me-2"></i> SALIR
+                    </a>
+                </div>
+
+            </div>
+        </nav>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/alerts.js" asp-append-version="true"></script>
+
+    <!-- Alertas -->
+    <script>
+        $(document).ready(function () {
+            var mensajeExito = '@Html.Raw(TempData["Mensaje"] ?? "")';
+            var mensajeError = '@Html.Raw(TempData["Error"] ?? "")';
+
+            if (mensajeExito && mensajeExito.trim().length > 0) MostrarExito(mensajeExito);
+            if (mensajeError && mensajeError.trim().length > 0) MostrarError(mensajeError);
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

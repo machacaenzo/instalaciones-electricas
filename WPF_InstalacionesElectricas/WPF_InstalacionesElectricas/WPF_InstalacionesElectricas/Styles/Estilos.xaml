@@ -1,0 +1,641 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- =========================================
+         1. PANEL DE VIDRIO (.glass-panel)
+         ========================================= -->
+    <Style x:Key="GlassPanel" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource VidrioFondoBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource VidrioBordeBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="40" ShadowDepth="10" Opacity="0.4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- =========================================
+         2. BOTÓN NEÓN (.btn-neon)
+         ========================================= -->
+    <Style x:Key="BtnNeon" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource NeonBrush}"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            CornerRadius="25"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0"/>
+                        <Border.Effect>
+                            <DropShadowEffect Color="{StaticResource NeonColor}" BlurRadius="10" ShadowDepth="0" Opacity="0.3"/>
+                        </Border.Effect>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#E6FF66"/>
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource NeonColor}" BlurRadius="25" ShadowDepth="0" Opacity="0.6"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- =========================================
+         3. INPUTS CYBER (.input-group-cyber)
+         ========================================= -->
+    <Style x:Key="InputCyber" TargetType="TextBox">
+        <Setter Property="Background" Value="{DynamicResource InputFondoBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBordeBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="45"/>
+        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource NeonBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="5,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+                            <Setter TargetName="border" Property="Background" Value="#26FFFFFF"/>
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource NeonColor}" BlurRadius="10" ShadowDepth="0" Opacity="0.2"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PasswordCyber" TargetType="PasswordBox">
+        <Setter Property="Background" Value="{DynamicResource InputFondoBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBordeBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Height" Value="45"/>
+        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource NeonBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="5,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+                            <Setter TargetName="border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource NeonColor}" BlurRadius="10" ShadowDepth="0" Opacity="0.2"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- =========================================
+         4. TEXTOS (.title-cyber)
+         ========================================= -->
+    <Style x:Key="TituloCyber" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2" Opacity="0.5"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SubtituloCyber" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextoGris}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Typography.Capitals" Value="AllSmallCaps"/>
+    </Style>
+
+    <!-- =========================================
+         5. MENÚ LATERAL (RadioButton)
+         ========================================= -->
+    <Style x:Key="MenuRadioBtn" TargetType="RadioButton">
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="GroupName" Value="MenuPrincipal"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="bdr" CornerRadius="25" Background="{TemplateBinding Background}" Padding="20,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <ContentPresenter Content="{TemplateBinding Tag}" Margin="0,0,15,0" TextElement.FontSize="20"/>
+                            <ContentPresenter Content="{TemplateBinding Content}" TextElement.FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bdr" Property="Background" Value="#1AFFFFFF"/>
+                            <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="bdr" Property="Background" Value="{StaticResource NeonBrush}"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter TargetName="bdr" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="{StaticResource NeonColor}" BlurRadius="15" ShadowDepth="0" Opacity="0.6"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- =========================================
+         6. BOTONES DE CONTROL DE VENTANA (Min, Max, Cerrar)
+         ========================================= -->
+    <Style x:Key="WindowControlBtn" TargetType="Button">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#33FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="WindowCloseBtn" TargetType="Button" BasedOn="{StaticResource WindowControlBtn}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Red"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- =========================================
+         7. FOTO DE PERFIL (Con Fallback)
+         ========================================= -->
+    <Style x:Key="ProfileImageEllipse" TargetType="Ellipse">
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Stroke" Value="{DynamicResource NeonBrush}"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+        <Setter Property="Fill">
+            <Setter.Value>
+                <ImageBrush ImageSource="{Binding FotoPerfilBitmap}" Stretch="UniformToFill"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Si la foto es NULL, usamos user.png -->
+            <DataTrigger Binding="{Binding FotoPerfilBitmap}" Value="{x:Null}">
+                <Setter Property="Fill">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Imagenes/user.png" Stretch="UniformToFill"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- =========================================
+         8. BOTÓN CERRAR SESIÓN (Estilo Alerta)
+         ========================================= -->
+    <Style x:Key="LogoutBtn" TargetType="Button">
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Background" Value="#33FF0000"/>
+        <Setter Property="Foreground" Value="#FF5555"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bdr" CornerRadius="15" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bdr" Property="Background" Value="Red"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <!-- =========================================
+     ESTILOS KANBAN 
+     ========================================= -->
+
+    <!-- Encabezado de Columna (PENDIENTES, ETC) -->
+    <Style x:Key="KanbanHeader" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource NeonBrush}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="{StaticResource NeonColor}" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tarjeta de Tarea (Reemplaza al borde simple) -->
+    <Style x:Key="KanbanCard" TargetType="Border">
+        <Setter Property="Background" Value="#1AFFFFFF"/>
+        <!-- Vidrio suave -->
+        <Setter Property="BorderBrush" Value="{DynamicResource VidrioBordeBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+        <!-- Separación vertical -->
+        <Setter Property="Padding" Value="12"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#26FFFFFF"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Botón de Acción Pequeño (Para las tarjetas) -->
+    <Style x:Key="BtnCardAction" TargetType="Button">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="0,5,5,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bdr" CornerRadius="6" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bdr" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- =========================================
+     ESTILOS PARA TABLAS (DataGrid Cyber)
+     ========================================= -->
+
+    <!-- 1. Estilo de los Encabezados de Columna -->
+    <Style x:Key="CyberColumnHeader" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextoGris}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource VidrioBordeBrush}"/>
+    </Style>
+
+    <!-- 2. Estilo de las Celdas (Centrado vertical) -->
+    <Style x:Key="CyberCell" TargetType="DataGridCell">
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border Padding="{TemplateBinding Padding}" 
+                        Background="Transparent" 
+                        BorderBrush="Transparent" 
+                        BorderThickness="0">
+                        <ContentPresenter VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource NeonBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 3. Estilo de las Filas (Hover y Selección) -->
+    <Style x:Key="CyberRow" TargetType="DataGridRow">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="#1AFFFFFF"/>
+        <!-- Línea separadora sutil -->
+        <Setter Property="Padding" Value="0,8"/>
+        <Style.Triggers>
+            <!-- Hover: Se ilumina un poco el fondo -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#1AFFFFFF"/>
+            </Trigger>
+            <!-- Selección: Borde Neon a la izquierda -->
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#0DFFFFFF"/>
+                <Setter Property="BorderThickness" Value="2,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 4. EL ESTILO PRINCIPAL (DataGridStyle) -->
+    <Style x:Key="DataGridStyle" TargetType="DataGrid">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="RowHeaderWidth" Value="0"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <!-- Sin cuadrícula, solo líneas de fila -->
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+
+        <!-- Vinculamos los sub-estilos creados arriba -->
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource CyberColumnHeader}"/>
+        <Setter Property="RowStyle" Value="{StaticResource CyberRow}"/>
+        <Setter Property="CellStyle" Value="{StaticResource CyberCell}"/>
+    </Style>
+
+    <!-- =========================================
+     ESTILO DATEPICKER (Selector de Fecha)
+     ========================================= -->
+    <Style x:Key="DatePickerCyber" TargetType="DatePicker">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SelectedDate" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DatePicker">
+                    <Border Background="{DynamicResource InputFondoBrush}" 
+                        BorderBrush="{DynamicResource InputBordeBrush}" 
+                        BorderThickness="1" 
+                        CornerRadius="8" 
+                        Padding="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- La cajita de texto (usamos tu estilo InputCyber o similar) -->
+                            <DatePickerTextBox x:Name="PART_TextBox" 
+                                           Grid.Column="0"
+                                           Foreground="White" 
+                                           Background="Transparent"
+                                           BorderThickness="0"
+                                           Padding="5,0"
+                                           VerticalContentAlignment="Center"
+                                           SelectionBrush="{DynamicResource NeonBrush}"/>
+
+                            <!-- El botón del calendario -->
+                            <Button x:Name="PART_Button" 
+                                Grid.Column="1" 
+                                Foreground="{DynamicResource NeonBrush}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Focusable="False"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Content="📅"/>
+
+                            <Popup x:Name="PART_Popup"/>
+                        </Grid>
+                    </Border>
+                    <!-- Triggers para efectos visuales -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- =========================================
+     BADGES DE ESTADO (Las pastillas de colores)
+     Para usar dentro de las celdas del DataGrid
+     ========================================= -->
+    <Style x:Key="BadgeEstado" TargetType="Border">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+        <Setter Property="TextBlock.FontSize" Value="10"/>
+    </Style>
+    <!-- =========================================
+     ESTILOS PARA COMBOBOX (CORREGIDO)
+     ========================================= -->
+
+    <!-- 1. ESTILO DE LOS ITEMS (Las filas del desplegable) -->
+    <Style x:Key="ComboItemCyber" TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="10,8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="bd" 
+                        Background="{TemplateBinding Background}" 
+                        Padding="{TemplateBinding Padding}" 
+                        BorderThickness="0,0,0,1" 
+                        BorderBrush="#333">
+                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#26D4FF00"/>
+                            <Setter Property="Foreground" Value="{DynamicResource NeonBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#40D4FF00"/>
+                            <Setter Property="Foreground" Value="{DynamicResource NeonBrush}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 2. TEMPLATE DEL BOTÓN (CAMBIO: AHORA ES UN CONTROL TEMPLATE) -->
+    <ControlTemplate x:Key="ComboToggleBtnTemplate" TargetType="ToggleButton">
+        <Border x:Name="border"
+            Background="{DynamicResource InputFondoBrush}"
+            BorderBrush="{DynamicResource InputBordeBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- La flechita -->
+                <Path x:Name="arrow" 
+                  Grid.Column="1" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Data="M0,0 L5,5 L10,0" 
+                  Stroke="White" 
+                  StrokeThickness="2"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+                <Setter TargetName="arrow" Property="Stroke" Value="{DynamicResource NeonBrush}"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="true">
+                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource NeonBrush}"/>
+                <Setter TargetName="arrow" Property="Stroke" Value="{DynamicResource NeonBrush}"/>
+                <Setter TargetName="arrow" Property="Data" Value="M0,5 L5,0 L10,5"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- 3. ESTILO PRINCIPAL -->
+    <Style x:Key="ComboCyber" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ComboItemCyber}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <!-- AQUÍ ESTABA EL ERROR: Ahora usamos el Template correctamente -->
+                        <ToggleButton Name="ToggleButton" 
+                                  Template="{StaticResource ComboToggleBtnTemplate}" 
+                                  Grid.Column="2" 
+                                  Focusable="false"
+                                  IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                  ClickMode="Press"/>
+
+                        <ContentPresenter Name="ContentSite"
+                                      IsHitTestVisible="False" 
+                                      Content="{TemplateBinding SelectionBoxItem}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                      Margin="10,0,30,0"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left" />
+
+                        <Popup Name="Popup"
+                           Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True" 
+                           Focusable="False"
+                           PopupAnimation="Slide">
+                            <Grid Name="DropDown"
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+
+                                <Border x:Name="DropDownBorder"
+                                    Background="#0A0A0A"
+                                    BorderThickness="1"
+                                    BorderBrush="{DynamicResource NeonBrush}"
+                                    CornerRadius="8"
+                                    Margin="0,5,0,0">
+                                    <ScrollViewer Margin="2" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" Opacity="0.5"/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

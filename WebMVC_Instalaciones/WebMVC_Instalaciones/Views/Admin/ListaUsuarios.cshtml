@@ -1,0 +1,160 @@
+﻿@model IEnumerable<WebMVC_Instalaciones.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Listado de Usuarios";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    bool mostrarInactivos = ViewBag.MostrarInactivos ?? false;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="title-cyber mb-0">DIRECTORIO</h2>
+        <p class="subtitle-cyber mb-0">PERSONAL Y CLIENTES</p>
+    </div>
+
+    <div class="d-flex gap-2 align-items-center">
+        <!-- FILTRO SWITCH -->
+        <form method="get" asp-action="Usuarios" class="d-flex align-items-center glass-panel px-3 py-1 mb-0" style="padding: 0.5rem 1rem;">
+            <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" id="chkInactivos"
+                       name="mostrarInactivos" value="true" onchange="this.form.submit()"
+                @(mostrarInactivos ? "checked" : "") style="cursor:pointer;">
+                <label class="form-check-label text-white-50 small ms-2" for="chkInactivos" style="cursor:pointer;">BAJAS</label>
+            </div>
+        </form>
+
+        <a asp-action="CrearUsuario" class="btn btn-sm btn-neon rounded-pill px-3 fw-bold" style="margin:0;">
+            <i class="bi bi-person-plus-fill"></i> <span class="d-none d-sm-inline ms-1">NUEVO</span>
+        </a>
+    </div>
+</div>
+
+<!-- VISTA PC (TABLA) -->
+<div class="glass-panel p-0 overflow-hidden d-none d-md-block">
+    <div class="table-responsive">
+        <table class="table-cyber mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>USUARIO</th>
+                    <th>CONTACTO</th>
+                    <th>ROL</th>
+                    <th>ESTADO</th>
+                    <th class="text-end">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr style="@(u.Activo ? "" : "opacity: 0.5;")">
+                        <td><span class="text-white-50">#@u.Id</span></td>
+                        <td><div class="fw-bold text-white">@u.NombreCompleto</div></td>
+                        <td>
+                            <div class="small text-white-50"><i class="bi bi-envelope me-1"></i> @u.Correo</div>
+                            <div class="small text-white-50"><i class="bi bi-telephone me-1"></i> @u.Celular</div>
+                        </td>
+                        <td>
+                            @if (u.NombreRol == "Administrador")
+                            {
+                                <span class="badge bg-warning text-dark">ADMIN</span>
+                            }
+                            else if (u.NombreRol == "Instalador")
+                            {
+                                <span class="badge bg-info text-dark">TÉCNICO</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary text-white">CLIENTE</span>
+                            }
+                        </td>
+                        <td>
+                            @if (u.Activo)
+                            {
+                                <span class="text-success small fw-bold">ACTIVO</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger small fw-bold">BAJA</span>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            @if (u.Activo)
+                            {
+                                <a asp-action="EditarUsuario" asp-route-id="@u.Id" class="btn btn-sm btn-outline-light border-0"><i class="bi bi-pencil-square"></i></a>
+                                <form id="form-borrar-@u.Id" asp-action="EliminarUsuario" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@u.Id" />
+                                    <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="ConfirmarAccion('¿DAR DE BAJA?', 'El usuario perderá acceso.', 'form-borrar-@u.Id')"><i class="bi bi-trash"></i></button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form id="form-reactivar-@u.Id" asp-action="ReactivarUsuario" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@u.Id" />
+                                    <button type="button" class="btn btn-sm btn-outline-success border-0" onclick="ConfirmarAccion('¿REACTIVAR?', 'Recuperar acceso.', 'form-reactivar-@u.Id')"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- VISTA MÓVIL (TARJETAS) -->
+<div class="d-md-none">
+    @foreach (var u in Model)
+    {
+        <div class="glass-panel p-3 mb-3" style="border-left: 4px solid @(u.Activo ? "var(--neon-main)" : "red"); opacity: @(u.Activo ? "1" : "0.7")">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h5 class="fw-bold text-white mb-0">@u.NombreCompleto</h5>
+                    <small class="text-white-50">#@u.Id</small>
+                </div>
+                <div>
+                    @if (u.NombreRol == "Administrador")
+                    {
+                        <span class="badge bg-warning text-dark">ADMIN</span>
+                    }
+                    else if (u.NombreRol == "Instalador")
+                    {
+                        <span class="badge bg-info text-dark">TÉCNICO</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary text-white">CLIENTE</span>
+                    }
+                </div>
+            </div>
+
+            <div class="mb-3 ps-2 border-start border-secondary border-opacity-25">
+                <div class="small text-white-50 mb-1"><i class="bi bi-envelope me-2"></i> @u.Correo</div>
+                <div class="small text-white-50"><i class="bi bi-telephone me-2"></i> @u.Celular</div>
+            </div>
+
+            <div class="d-flex gap-2 mt-3 pt-3 border-top border-secondary border-opacity-25">
+                @if (u.Activo)
+                {
+                    <a asp-action="EditarUsuario" asp-route-id="@u.Id" class="btn btn-sm btn-outline-light flex-grow-1">
+                        <i class="bi bi-pencil-square me-1"></i> EDITAR
+                    </a>
+                    <form id="form-borrar-m-@u.Id" asp-action="EliminarUsuario" method="post" class="flex-grow-1">
+                        <input type="hidden" name="id" value="@u.Id" />
+                        <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="ConfirmarAccion('¿BAJA?', 'El usuario perderá acceso.', 'form-borrar-m-@u.Id')">
+                            <i class="bi bi-trash me-1"></i> BAJA
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <form id="form-reactivar-m-@u.Id" asp-action="ReactivarUsuario" method="post" class="w-100">
+                        <input type="hidden" name="id" value="@u.Id" />
+                        <button type="button" class="btn btn-sm btn-outline-success w-100" onclick="ConfirmarAccion('¿REACTIVAR?', 'Recuperar acceso.', 'form-reactivar-m-@u.Id')">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> REACTIVAR
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,113 @@
+﻿@model WebMVC_Instalaciones.Models.Solicitud
+
+@{
+    ViewData["Title"] = "Nueva Solicitud";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+        <div class="glass-panel glow">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h2 class="title-cyber">SOLICITAR TÉCNICO</h2>
+                    <p class="subtitle-cyber">NUEVA ORDEN DE TRABAJO</p>
+                </div>
+                <a asp-action="Index" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> VOLVER
+                </a>
+            </div>
+
+            <!-- CAMBIO 1: AGREGAR enctype="multipart/form-data" -->
+            <form asp-action="Crear" method="post" id="formSolicitud" enctype="multipart/form-data">
+
+                <!-- 1. DIRECCIÓN -->
+                <div class="mb-3">
+                    <span class="input-label">DIRECCIÓN / UBICACIÓN</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-geo-alt text-danger"></i>
+                        <input asp-for="Direccion" placeholder="Av. San Martín 450, Barrio Centro" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Direccion" class="text-danger small fw-bold"></span>
+                </div>
+
+                <!-- 2. FECHA DESEADA -->
+                <div class="mb-3">
+                    <span class="input-label">FECHA PREFERIDA</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-calendar-date text-primary"></i>
+                        <input asp-for="FechaDeseada" type="date" style="color-scheme: dark;" />
+                    </div>
+                    <span asp-validation-for="FechaDeseada" class="text-danger small fw-bold"></span>
+                </div>
+
+                <!-- 3. TIPO DE SERVICIO -->
+                <div class="mb-3">
+                    <span class="input-label">TIPO DE SERVICIO</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-lightning-charge text-warning"></i>
+                        <select id="selectTipo" class="bg-transparent border-0 text-white w-100" style="outline:none; cursor:pointer;">
+                            <option value="" class="text-secondary">-- Seleccionar Tipo --</option>
+                            <option value="[NUEVA OBRA]" class="text-dark">Instalación Nueva / Cableado</option>
+                            <option value="[REPARACIÓN]" class="text-dark">Reparación / Cortocircuito</option>
+                            <option value="[TABLERO]" class="text-dark">Cambio de Tablero / Térmicas</option>
+                            <option value="[ILUMINACIÓN]" class="text-dark">Instalación de Luminarias</option>
+                            <option value="[URGENCIA]" class="text-dark">Urgencia / Sin Luz (24hs)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CAMBIO 2: EVIDENCIA FOTOGRÁFICA (Nuevo Campo) -->
+                <div class="mb-3">
+                    <span class="input-label">FOTO DEL PROBLEMA (OPCIONAL)</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-camera text-info"></i>
+                        <input asp-for="ArchivoFoto" type="file" accept="image/*" class="text-white pt-2 w-100" />
+                    </div>
+                    <small class="text-white-50 ms-2" style="font-size: 0.7rem;">Formatos: JPG, PNG. Máx 5MB.</small>
+                </div>
+
+                <!-- CAMPO OCULTO -->
+                <input type="hidden" asp-for="Descripcion" id="inputDescripcionReal" />
+
+                <!-- 4. DETALLES -->
+                <div class="mb-4">
+                    <span class="input-label">DETALLES ADICIONALES</span>
+                    <div class="input-group-cyber" style="height: auto; align-items: flex-start; padding-top: 15px;">
+                        <i class="bi bi-card-text text-secondary mt-1"></i>
+                        <textarea id="txtDetalle" rows="3" class="bg-transparent border-0 text-white w-100"
+                                  placeholder="Ej: Es en el segundo piso, el timbre no funciona..." style="outline:none; resize:none;"></textarea>
+                    </div>
+                    <span asp-validation-for="Descripcion" class="text-danger small fw-bold"></span>
+                </div>
+
+                <button type="submit" class="btn-neon">
+                    CONFIRMAR SOLICITUD
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.5/localization/messages_es.min.js"></script>
+
+    <script>
+        document.getElementById('formSolicitud').addEventListener('submit', function (e) {
+            var tipo = document.getElementById('selectTipo').value;
+            var detalle = document.getElementById('txtDetalle').value;
+
+            if (tipo === "") {
+                tipo = "[CONSULTA GENERAL]";
+            }
+
+            var descripcionFinal = tipo + " " + detalle;
+            document.getElementById('inputDescripcionReal').value = descripcionFinal;
+        });
+    </script>
+}

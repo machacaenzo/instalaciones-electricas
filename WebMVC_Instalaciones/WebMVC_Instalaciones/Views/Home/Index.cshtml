@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center py-5">
+
+    <!-- HÉROE PRINCIPAL -->
+    <div class="glass-panel glow d-inline-block px-5 py-5 mb-5" style="max-width: 900px;">
+        <h1 class="display-3 fw-bold text-white mb-2" style="text-shadow: 0 0 20px rgba(255,255,255,0.3);">
+            ENERGÍA <span style="color: var(--neon-main);">INTELIGENTE</span>
+        </h1>
+        <p class="lead text-white-50 mb-4 mx-auto" style="max-width: 600px;">
+            La plataforma líder para gestión de instalaciones eléctricas.
+            Conectamos hogares y empresas con técnicos certificados en tiempo real.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            @if (!User.Identity!.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-neon px-5 py-3" style="width: auto; height: auto;">
+                    EMPEZAR AHORA
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold">
+                    YA TENGO CUENTA
+                </a>
+            }
+            else
+            {
+                // LÓGICA INTELIGENTE DE REDIRECCIÓN
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-neon px-5 py-3" style="width: auto; height: auto;">
+                        IR AL DASHBOARD
+                    </a>
+                }
+                else if (User.IsInRole("Instalador"))
+                {
+                    <a asp-controller="Solicitudes" asp-action="MisTrabajos" class="btn btn-neon px-5 py-3" style="width: auto; height: auto;">
+                        VER HOJA DE RUTA
+                    </a>
+                }
+                else
+                {
+                    // Cliente
+                    <a asp-controller="Solicitudes" asp-action="Index" class="btn btn-neon px-5 py-3" style="width: auto; height: auto;">
+                        VER MIS SOLICITUDES
+                    </a>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- CARACTERÍSTICAS (3 Columnas) -->
+    <div class="row g-4 mt-2">
+
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="glass-panel h-100 p-4 hover-effect">
+                <div class="mb-3 text-warning">
+                    <i class="bi bi-lightning-charge" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="text-white fw-bold">Velocidad</h4>
+                <p class="text-white-50 small">
+                    Sistema de asignación automática. Tu solicitud llega al técnico más cercano al instante.
+                </p>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+            <div class="glass-panel h-100 p-4 hover-effect" style="border-color: var(--neon-main);">
+                <div class="mb-3" style="color: var(--neon-main);">
+                    <i class="bi bi-shield-check" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="text-white fw-bold">Seguridad</h4>
+                <p class="text-white-50 small">
+                    Todos nuestros instaladores están matriculados y verificados por nuestra administración.
+                </p>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+            <div class="glass-panel h-100 p-4 hover-effect">
+                <div class="mb-3 text-info">
+                    <i class="bi bi-laptop" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="text-white fw-bold">100% Digital</h4>
+                <p class="text-white-50 small">
+                    Olvidate del papel. Seguí el estado de tu reparación desde tu celular o computadora.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Animación suave para las tarjetas del Home */
+    .hover-effect {
+        transition: transform 0.3s ease;
+    }
+
+        .hover-effect:hover {
+            transform: translateY(-10px);
+        }
+</style>

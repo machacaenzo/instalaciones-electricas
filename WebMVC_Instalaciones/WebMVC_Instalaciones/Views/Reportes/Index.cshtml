@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Reportes";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="title-cyber">ANÁLISIS DE DATOS</h2>
+        <p class="subtitle-cyber">MÉTRICAS DE RENDIMIENTO</p>
+    </div>
+    <a asp-action="ExportarPDF"
+       asp-route-desde="@ViewBag.FechaDesde"
+       asp-route-hasta="@ViewBag.FechaHasta"
+       asp-route-idTecnico="@ViewBag.IdTecnico"
+       asp-route-idCliente="@ViewBag.IdCliente"
+       target="_blank" class="btn btn-neon px-4">
+        <i class="bi bi-file-earmark-pdf-fill me-2"></i> IMPRIMIR PDF
+    </a>
+</div>
+
+<!-- BARRA DE FILTROS -->
+<div class="glass-panel p-3 mb-4">
+    <form method="get" asp-action="Index">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <span class="input-label">DESDE</span>
+                <div class="input-group-cyber mb-0">
+                    <i class="bi bi-calendar-event text-warning"></i>
+                    <input type="date" name="desde" value="@ViewBag.FechaDesde" style="color-scheme: dark;" class="w-100 bg-transparent border-0 text-white" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <span class="input-label">HASTA</span>
+                <div class="input-group-cyber mb-0">
+                    <i class="bi bi-calendar-event-fill text-warning"></i>
+                    <input type="date" name="hasta" value="@ViewBag.FechaHasta" style="color-scheme: dark;" class="w-100 bg-transparent border-0 text-white" />
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <span class="input-label">TÉCNICO</span>
+                <div class="input-group-cyber mb-0">
+                    <i class="bi bi-tools text-info"></i>
+                    <select name="idTecnico" asp-items="@ViewBag.Tecnicos" class="w-100 bg-transparent border-0 text-white" style="outline:none;">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <span class="input-label">CLIENTE</span>
+                <div class="input-group-cyber mb-0">
+                    <i class="bi bi-person-circle text-white"></i>
+                    <select name="idCliente" asp-items="@ViewBag.Clientes" class="w-100 bg-transparent border-0 text-white" style="outline:none;">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row g-2">
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-neon w-100" style="margin-top:0; height: 45px;">
+                    <i class="bi bi-filter me-2"></i> FILTRAR
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="Index" class="btn btn-outline-light w-100 fw-bold rounded-pill" style="height: 45px; display: flex; align-items: center; justify-content: center;">
+                    LIMPIAR
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row g-4">
+    <!-- GRÁFICO 1: ESTADOS (Torta) -->
+    <div class="col-md-6">
+        <div class="glass-panel h-100">
+            <h5 class="text-white mb-4 border-bottom border-secondary border-opacity-25 pb-2">
+                ESTADO DE SOLICITUDES
+            </h5>
+            <div style="height: 300px; position: relative;">
+                <canvas id="chartEstados"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO 2: RANKING (Barras) -->
+    <div class="col-md-6">
+        <div class="glass-panel h-100">
+            <h5 class="text-white mb-4 border-bottom border-secondary border-opacity-25 pb-2">
+                TOP CLIENTES ACTIVOS
+            </h5>
+            <div style="height: 300px; position: relative;">
+                <canvas id="chartRanking"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Configuración de Colores para los 5 Estados
+    // 1:Pendiente(Yellow), 2:Asignada(Cyan), 3:Progreso(Blue), 4:Fin(Green), 5:Cancel(Red)
+    const cPendiente = '#ffc107';
+    const cAsignada = '#0dcaf0';
+    const cProceso = '#0d6efd';
+    const cFin = '#198754';
+    const cCancel = '#dc3545';
+    const cTexto = '#ffffff';
+
+    // 1. Torta
+    new Chart(document.getElementById('chartEstados'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Pendiente', 'Asignada', 'En Proceso', 'Finalizada', 'Cancelada'],
+            datasets: [{
+                data: [
+    @ViewBag.Pendientes,
+    @ViewBag.Asignadas,
+    @ViewBag.EnProceso,
+    @ViewBag.Finalizadas,
+    @ViewBag.Canceladas
+                ],
+                backgroundColor: [cPendiente, cAsignada, cProceso, cFin, cCancel],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { color: cTexto, font: { family: 'Inter' } } } }
+        }
+    });
+
+    // 2. Barras
+    const labelsRanking = @Html.Raw(Json.Serialize(ViewBag.LabelsRanking));
+    const dataRanking = @Html.Raw(Json.Serialize(ViewBag.DataRanking));
+
+    new Chart(document.getElementById('chartRanking'), {
+        type: 'bar',
+        data: {
+            labels: labelsRanking,
+            datasets: [{
+                label: 'Pedidos Realizados',
+                data: dataRanking,
+                backgroundColor: '#D4FF00',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: cTexto } },
+                x: { ticks: { color: cTexto } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+</script>

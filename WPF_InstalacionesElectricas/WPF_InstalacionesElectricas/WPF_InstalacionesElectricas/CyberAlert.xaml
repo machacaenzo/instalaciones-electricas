@@ -1,0 +1,164 @@
+﻿<Window x:Class="WPF_InstalacionesElectricas.CyberAlert"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Alerta" Height="350" Width="450"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen" Topmost="True">
+
+    <Window.Resources>
+        <!-- COLORES LOCALES PARA ESTA VENTANA -->
+        <SolidColorBrush x:Key="ColorSuccess" Color="#D4FF00"/>
+        <!-- Amarillo -->
+        <SolidColorBrush x:Key="ColorError" Color="#FF5252"/>
+        <!-- Rojo -->
+        <SolidColorBrush x:Key="ColorWarning" Color="#FFC107"/>
+        <!-- Ámbar -->
+        <SolidColorBrush x:Key="ColorInfo" Color="#00E5FF"/>
+        <!-- Cyan -->
+
+        <!-- ESTILO DEL BOTÓN DE LA ALERTA (Para evitar el error del Trigger) -->
+        <Style x:Key="AlertButtonStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bdr" CornerRadius="22" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Border.Effect>
+                                <!-- Sombra suave por defecto -->
+                                <DropShadowEffect Color="{Binding Background.Color, RelativeSource={RelativeSource TemplatedParent}}" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                            </Border.Effect>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <!-- Al pasar el mouse, cambiamos la opacidad del grid contenedor o aclaramos el fondo -->
+                                <Setter TargetName="bdr" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bdr" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95" CenterX="80" CenterY="22"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Borde Principal -->
+    <Border x:Name="MainBorder" 
+            Background="#0A0A0A" 
+            BorderThickness="1" 
+            CornerRadius="20" 
+            Margin="20">
+        <Border.Effect>
+            <DropShadowEffect x:Name="GlowEffect" Color="#D4FF00" BlurRadius="30" ShadowDepth="0" Opacity="0.4"/>
+        </Border.Effect>
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Icono -->
+                <RowDefinition Height="Auto"/>
+                <!-- Título -->
+                <RowDefinition Height="*"/>
+                <!-- Mensaje -->
+                <RowDefinition Height="Auto"/>
+                <!-- Botones -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. ICONOS (CENTRADOS ÓPTICAMENTE) -->
+            <Grid Grid.Row="0" Margin="0,10,0,20" HorizontalAlignment="Center">
+                <Border x:Name="IconCircle" Width="80" Height="80" CornerRadius="40" BorderThickness="3" Background="Transparent">
+                    <Grid>
+                        <!-- 
+                             ICONO SUCCESS (Check) 
+                             Usamos Stretch="Uniform" para que se escale solo.
+                             Margin="0,5,0,0" baja un poquito el check para que se vea centrado visualmente.
+                        -->
+                        <Path x:Name="IconSuccess" 
+                              Data="M0,12 L10,22 L35,-5" 
+                              Stroke="{Binding BorderBrush, ElementName=IconCircle}" 
+                              StrokeThickness="5" 
+                              StrokeStartLineCap="Round" 
+                              StrokeEndLineCap="Round" 
+                              Width="38" Height="30"
+                              Stretch="Uniform"
+                              HorizontalAlignment="Center" 
+                              VerticalAlignment="Center" 
+                              Margin="0,4,0,0"
+                              Visibility="Collapsed"/>
+
+                        <!-- 
+                             ICONO ERROR (X)
+                             Definimos una cruz simple de 10x10 y forzamos el tamaño a 28x28.
+                             Esto garantiza que quede en el centro exacto del círculo.
+                        -->
+                        <Path x:Name="IconError" 
+                              Data="M0,0 L10,10 M10,0 L0,10" 
+                              Stroke="{Binding BorderBrush, ElementName=IconCircle}" 
+                              StrokeThickness="5" 
+                              StrokeStartLineCap="Round" 
+                              StrokeEndLineCap="Round" 
+                              Width="28" Height="28"
+                              Stretch="Uniform"
+                              HorizontalAlignment="Center" 
+                              VerticalAlignment="Center" 
+                              Visibility="Collapsed"/>
+
+                        <!-- ICONO WARNING (!) -->
+                        <TextBlock x:Name="IconWarning" 
+                                   Text="!" 
+                                   FontSize="48" 
+                                   FontWeight="Bold" 
+                                   Foreground="{Binding BorderBrush, ElementName=IconCircle}" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,-4,0,0" 
+                                   Visibility="Collapsed"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <!-- 2. TÍTULO -->
+            <TextBlock x:Name="txtTitulo" Grid.Row="1" Text="TÍTULO" Foreground="White" FontSize="28" FontWeight="ExtraBold" HorizontalAlignment="Center" TextAlignment="Center"/>
+
+            <!-- 3. MENSAJE -->
+            <TextBlock x:Name="txtMensaje" Grid.Row="2" Text="Mensaje de la alerta..." Foreground="#CCCCCC" FontSize="16" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="10,10,10,20"/>
+
+            <!-- 4. BOTONES -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+
+                <!-- Botón Cancelar (Manual, sin estilos complejos) -->
+                <Button x:Name="btnCancelar" Content="CANCELAR" Click="btnCancelar_Click" Visibility="Collapsed"
+                        Width="120" Height="45" Margin="0,0,15,0" Cursor="Hand"
+                        Background="Transparent" Foreground="White" BorderThickness="1" BorderBrush="#666" FontSize="14" FontWeight="Bold">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bdr" CornerRadius="22" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bdr" Property="Background" Value="#33FFFFFF"/>
+                                    <Setter TargetName="bdr" Property="BorderBrush" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Botón Aceptar (Usa el estilo arreglado de arriba) -->
+                <Button x:Name="btnAceptar" Content="CONTINUAR" Click="btnAceptar_Click" 
+                        Width="160" Height="45" 
+                        Style="{StaticResource AlertButtonStyle}"
+                        Background="#D4FF00"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

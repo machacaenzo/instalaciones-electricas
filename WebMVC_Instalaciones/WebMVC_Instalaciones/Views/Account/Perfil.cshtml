@@ -1,0 +1,118 @@
+﻿@model WebMVC_Instalaciones.Models.Usuario
+
+@{
+    ViewData["Title"] = "Mi Perfil";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="glass-panel glow">
+
+            <div class="text-center mb-4">
+                <h2 class="title-cyber">MI PERFIL</h2>
+                <p class="subtitle-cyber">DATOS DE LA CUENTA</p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger border-0 bg-opacity-10 bg-danger text-danger text-center">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <!-- CAMBIO 1: AGREGAR enctype PARA ENVIAR ARCHIVOS -->
+            <form asp-action="Perfil" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IdRol" />
+                <input type="hidden" asp-for="Activo" />
+
+                <!-- CAMBIO 2: FOTO DE PERFIL CON PREVISUALIZACIÓN -->
+                <div class="d-flex justify-content-center mb-4">
+                    <div class="position-relative">
+                        <!-- IMAGEN CIRCULAR -->
+                        <!-- Intenta cargar de la API. Si falla (404), carga un avatar genérico con las iniciales -->
+                        <img id="imgPerfil"
+                             src="https://localhost:7088/api/Usuarios/@Model.Id/foto?v=@DateTime.Now.Ticks"
+                             onerror="this.src='https://ui-avatars.com/api/?name=@Model.NombreCompleto&background=random&size=128&color=fff'"
+                             class="rounded-circle shadow-lg"
+                             style="width: 130px; height: 130px; object-fit: cover; border: 3px solid var(--neon-main);"
+                             alt="Foto Perfil" />
+
+                        <!-- BOTÓN DE CÁMARA (Label que activa el input file oculto) -->
+                        <label for="uploadFoto" class="position-absolute bottom-0 end-0 bg-warning text-dark rounded-circle p-2 shadow"
+                               style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="bi bi-camera-fill"></i>
+                        </label>
+
+                        <!-- INPUT OCULTO -->
+                        <input asp-for="ArchivoFoto" type="file" id="uploadFoto" accept="image/*" style="display:none;" onchange="previewImage(this)" />
+                    </div>
+                </div>
+
+                <!-- 1. CORREO (SOLO LECTURA) -->
+                <div class="mb-3">
+                    <span class="input-label">CORREO (NO MODIFICABLE)</span>
+                    <div class="input-group-cyber" style="opacity: 0.6; cursor: not-allowed;">
+                        <i class="bi bi-envelope-lock-fill text-secondary"></i>
+                        <input asp-for="Correo" readonly style="cursor: not-allowed; color: #aaa;" />
+                    </div>
+                </div>
+
+                <!-- 2. NOMBRE -->
+                <div class="mb-3">
+                    <span class="input-label">NOMBRE COMPLETO</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-person-vcard text-warning"></i>
+                        <input asp-for="NombreCompleto" placeholder="Tu nombre" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="NombreCompleto" class="text-danger small fw-bold"></span>
+                </div>
+
+                <!-- 3. CELULAR -->
+                <div class="mb-4">
+                    <span class="input-label">TELÉFONO / CELULAR</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-whatsapp text-success"></i>
+                        <input asp-for="Celular" placeholder="+54 9..." autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Celular" class="text-danger small fw-bold"></span>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex gap-2">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light w-50 rounded-pill fw-bold">
+                        CANCELAR
+                    </a>
+                    <button type="submit" class="btn-neon w-50" style="margin-top:0;">
+                        GUARDAR CAMBIOS
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- SCRIPT PARA PREVISUALIZAR LA FOTO AL SELECCIONARLA -->
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // Cambiamos el src de la imagen por el archivo seleccionado (Base64 temporal)
+                    document.getElementById('imgPerfil').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

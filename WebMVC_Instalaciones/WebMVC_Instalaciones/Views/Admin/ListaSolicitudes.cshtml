@@ -1,0 +1,132 @@
+﻿@model IEnumerable<WebMVC_Instalaciones.Models.Solicitud>
+
+@{
+    ViewData["Title"] = "Gestión de Solicitudes";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="title-cyber mb-0">SOLICITUDES</h2>
+        <p class="subtitle-cyber">ASIGNACIÓN Y SEGUIMIENTO</p>
+    </div>
+</div>
+
+<!-- VISTA PC (TABLA) -->
+<div class="glass-panel p-0 overflow-hidden d-none d-md-block">
+    <div class="table-responsive">
+        <table class="table-cyber mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>FECHA DESEADA</th>
+                    <th>CLIENTE / DIRECCIÓN</th>
+                    <th>ESTADO</th>
+                    <th class="text-end">ACCIÓN REQUERIDA</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span class="text-white-50">#@item.Id</span></td>
+                        <td>
+                            <div class="text-white fw-bold">@item.FechaDeseada.ToShortDateString()</div>
+                            <small class="text-white-50">Solicitado: @item.FechaSolicitud.ToShortDateString()</small>
+                        </td>
+                        <td>
+                            <div class="text-white"><i class="bi bi-person me-1"></i> @(item.Cliente?.NombreCompleto ?? "Desconocido")</div>
+                            <div class="small text-warning"><i class="bi bi-geo-alt me-1"></i> @item.Direccion</div>
+                        </td>
+                        <td>
+                            @if (item.IdEstadoSolicitud == 1)
+                            {
+                                <span class="badge bg-warning text-dark border border-warning">PENDIENTE</span>
+                            }
+                            else if (item.IdEstadoSolicitud == 2)
+                            {
+                                <span class="badge bg-primary text-white border border-primary">ASIGNADA</span>
+                            }
+                            else if (item.IdEstadoSolicitud == 3)
+                            {
+                                <span class="badge bg-info text-dark border border-info">EN PROCESO</span>
+                            }
+                            else if (item.IdEstadoSolicitud == 4)
+                            {
+                                <span class="badge bg-success text-white border border-success">FINALIZADA</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger text-white border border-danger">CANCELADA</span>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            @if (item.IdEstadoSolicitud == 1)
+                            {
+                                <a asp-action="Asignar" asp-route-idSolicitud="@item.Id" class="btn btn-sm btn-neon fw-bold px-3">
+                                    <i class="bi bi-person-plus-fill me-2"></i> ASIGNAR TÉCNICO
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-white-50 small fst-italic"><i class="bi bi-check2-all me-1"></i> Gestionado</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- VISTA MÓVIL (TARJETAS) -->
+<div class="d-md-none">
+    @foreach (var item in Model)
+    {
+        <div class="glass-panel p-3 mb-3 position-relative" style="border-left: 4px solid @(item.IdEstadoSolicitud == 1 ? "var(--neon-main)" : "gray");">
+
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h5 class="fw-bold text-white mb-0">Orden #@item.Id</h5>
+                    <small class="text-white-50">@item.FechaSolicitud.ToShortDateString()</small>
+                </div>
+                <!-- Badge Estado -->
+                @if (item.IdEstadoSolicitud == 1)
+                {
+                    <span class="badge bg-warning text-dark border border-warning">PENDIENTE</span>
+                }
+                else if (item.IdEstadoSolicitud == 2)
+                {
+                    <span class="badge bg-primary text-white border border-primary">ASIGNADA</span>
+                }
+                else if (item.IdEstadoSolicitud == 3)
+                {
+                    <span class="badge bg-info text-dark border border-info">EN PROCESO</span>
+                }
+                else if (item.IdEstadoSolicitud == 4)
+                {
+                    <span class="badge bg-success text-white border border-success">FINALIZADA</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger text-white border border-danger">CANCELADA</span>
+                }
+            </div>
+
+            <div class="mb-3 ps-2 border-start border-secondary border-opacity-25">
+                <div class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-2"></i> @item.Direccion</div>
+                <div class="small text-white-50 mb-1"><i class="bi bi-calendar-event me-2"></i> Para el: @item.FechaDeseada.ToShortDateString()</div>
+                <div class="small text-white-50"><i class="bi bi-person me-2"></i> @(item.Cliente?.NombreCompleto ?? "Cliente")</div>
+            </div>
+
+            @if (item.IdEstadoSolicitud == 1)
+            {
+                <div class="mt-3 pt-3 border-top border-secondary border-opacity-25">
+                    <a asp-action="Asignar" asp-route-idSolicitud="@item.Id" class="btn btn-sm btn-neon w-100 fw-bold">
+                        <i class="bi bi-person-plus-fill me-2"></i> ASIGNAR TÉCNICO
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</div>

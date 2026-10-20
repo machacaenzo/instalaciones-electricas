@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+         PALETA INDUSTRIAL - CRISTAL PURO (WPF) -->
+
+    <!-- VAR: color-fondo: #0a0a0a -->
+    <SolidColorBrush x:Key="ColorFondo" Color="#0A0A0A"/>
+
+    <!-- VAR: neon-main: #D4FF00 (Amarillo Ácido) -->
+    <Color x:Key="NeonColor">#D4FF00</Color>
+    <SolidColorBrush x:Key="NeonBrush" Color="{StaticResource NeonColor}"/>
+
+    <!-- VAR: texto-blanco: #ffffff -->
+    <SolidColorBrush x:Key="TextoBlanco" Color="#FFFFFF"/>
+
+    <!-- VAR: texto-gris: #e0e0e0 -->
+    <SolidColorBrush x:Key="TextoGris" Color="#E0E0E0"/>
+
+    <!-- EFECTOS DE VIDRIO (Simulados con Alpha Channel) -->
+
+    <!-- VAR: vidrio-bg (Fondo de paneles) ~12% Blanco -->
+    <SolidColorBrush x:Key="VidrioFondoBrush" Color="#1FFFFFFF"/>
+
+    <!-- VAR: vidrio-borde (Bordes de paneles) ~30% Blanco -->
+    <SolidColorBrush x:Key="VidrioBordeBrush" Color="#4DFFFFFF"/>
+
+    <!-- VAR: input-bg (Fondo Inputs) ~7% Blanco -->
+    <SolidColorBrush x:Key="InputFondoBrush" Color="#12FFFFFF"/>
+
+    <!-- VAR: input-borde ~15% Blanco -->
+    <SolidColorBrush x:Key="InputBordeBrush" Color="#26FFFFFF"/>
+
+    <!-- Sombras de Neón (DropShadowEffect no es un Brush, lo usaremos en Estilos) -->
+
+    <!-- Colores semánticos para Estados -->
+    <SolidColorBrush x:Key="EstadoPendiente" Color="#FFC107"/>
+    <!-- Amber -->
+    <SolidColorBrush x:Key="EstadoProceso" Color="{StaticResource NeonColor}"/>
+    <!-- Neon -->
+    <SolidColorBrush x:Key="EstadoFinalizada" Color="#00E676"/>
+    <!-- Green -->
+    <SolidColorBrush x:Key="EstadoCancelada" Color="#FF5252"/>
+    <!-- Red -->
+
+</ResourceDictionary>

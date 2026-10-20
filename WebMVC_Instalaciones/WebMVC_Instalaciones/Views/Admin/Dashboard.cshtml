@@ -1,0 +1,135 @@
+﻿@model WebMVC_Instalaciones.Models.Dashboard
+
+
+@{
+    ViewData["Title"] = "Resumen";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="title-cyber">ESTADO DEL SISTEMA</h2>
+<p class="subtitle-cyber mb-5">MÉTRICAS EN TIEMPO REAL</p>
+
+<!-- TARJETAS PRINCIPALES -->
+<div class="row g-4 mb-4">
+
+    <!-- 1. PENDIENTES (Amarillo) -->
+    <div class="col-md-4">
+        <div class="glass-panel glow text-center py-4 h-100">
+            <h1 class="display-1 fw-bold text-warning mb-0" style="text-shadow: 0 0 20px rgba(255, 193, 7, 0.4);">
+                @Model.CantidadPendientes
+            </h1>
+            <p class="text-white small letter-spacing-2 mt-2">PENDIENTES DE ASIGNAR</p>
+            @if (Model.CantidadPendientes > 0)
+            {
+                <a asp-action="Solicitudes" class="btn btn-sm btn-outline-warning rounded-pill mt-3 px-4">ATENDER</a>
+            }
+        </div>
+    </div>
+
+    <!-- 2. EN PROCESO (Azul) -->
+    <div class="col-md-4">
+        <div class="glass-panel text-center py-4 h-100">
+            <h1 class="display-1 fw-bold text-info mb-0">
+                @Model.CantidadEnProceso
+            </h1>
+            <p class="text-white-50 small letter-spacing-2 mt-2">TÉCNICOS TRABAJANDO</p>
+        </div>
+    </div>
+
+    <!-- 3. STAFF (Verde) -->
+    <div class="col-md-4">
+        <div class="glass-panel py-4 px-4 h-100 d-flex flex-column justify-content-center">
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                <span class="text-white-50">USUARIOS TOTALES</span>
+                <span class="fw-bold text-white">@Model.TotalUsuarios</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                <span class="text-white-50">INSTALADORES</span>
+                <span class="fw-bold text-success">@Model.TotalTecnicos</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="text-white-50">FINALIZADAS</span>
+                <span class="fw-bold text-white">@Model.CantidadFinalizadas</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- COLUMNA IZQUIERDA: ESTADÍSTICAS (Barras reales) -->
+    <div class="col-md-6">
+        <div class="glass-panel p-4 h-100">
+            <h5 class="text-white mb-4"><i class="bi bi-pie-chart-fill me-2"></i> EFICIENCIA</h5>
+
+            <!-- Barra Pendientes -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between small text-white-50 mb-1">
+                    <span>Pendientes de Atención</span>
+                    <span>@Model.PorcentajePendientes%</span>
+                </div>
+                <div class="progress" style="height: 8px; background: rgba(255,255,255,0.1);">
+                    <div class="progress-bar bg-warning" role="progressbar"
+                         style="width: @Model.PorcentajePendientes%"></div>
+                </div>
+            </div>
+
+            <!-- Barra Finalizadas -->
+            <div class="mb-2">
+                <div class="d-flex justify-content-between small text-white-50 mb-1">
+                    <span>Trabajos Finalizados</span>
+                    <span>@Model.PorcentajeFinalizadas%</span>
+                </div>
+                <div class="progress" style="height: 8px; background: rgba(255,255,255,0.1);">
+                    <div class="progress-bar bg-success" role="progressbar"
+                         style="width: @Model.PorcentajeFinalizadas%; box-shadow: 0 0 10px rgba(25, 135, 84, 0.5);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: ÚLTIMAS SOLICITUDES (Mini Tabla) -->
+    <div class="col-md-6">
+        <div class="glass-panel p-4 h-100">
+            <h5 class="text-white mb-4"><i class="bi bi-clock-history me-2"></i> INGRESOS RECIENTES</h5>
+
+            @if (Model.UltimasSolicitudes.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-borderless text-white small align-middle">
+                        <tbody>
+                            @foreach (var item in Model.UltimasSolicitudes)
+                            {
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td class="text-white-50">#@item.Id</td>
+                                    <td class="fw-bold">@item.Direccion</td>
+                                    <td>
+                                        @if (item.IdEstadoSolicitud == 1)
+                                        {
+                                            <span class="text-warning">● Pendiente</span>
+                                        }
+                                        else if (item.IdEstadoSolicitud == 2)
+                                        {
+                                            <span class="text-info">● En Proceso</span>
+                                        }
+                                        else if (item.IdEstadoSolicitud == 3)
+                                        {
+                                            <span class="text-success">● Fin</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">● Cancel</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-white-50 text-center mt-4">No hay actividad reciente.</p>
+            }
+        </div>
+    </div>
+</div>

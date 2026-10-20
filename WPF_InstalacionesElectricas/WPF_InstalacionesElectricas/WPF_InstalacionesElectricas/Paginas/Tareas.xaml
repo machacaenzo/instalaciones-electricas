@@ -1,0 +1,158 @@
+﻿<Page x:Class="WPF_InstalacionesElectricas.Paginas.Tareas"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPF_InstalacionesElectricas.Paginas"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1000"
+      Title="Tablero Kanban" Background="Transparent">
+
+    <Page.Resources>
+        <!-- PEGAR AQUÍ LOS ESTILOS DE ARRIBA O USAR EL DICCIONARIO -->
+        <!-- (Asumo que ya tienes los estilos globales cargados en App.xaml) -->
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Título Página -->
+            <RowDefinition Height="*"/>
+            <!-- Tablero -->
+        </Grid.RowDefinitions>
+
+        <!-- TÍTULO -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="GESTIÓN OPERATIVA" Style="{StaticResource TituloCyber}"/>
+            <TextBlock Text="ARRASTRA O UTILIZA LOS BOTONES PARA MOVER LAS TAREAS" Style="{StaticResource SubtituloCyber}"/>
+        </StackPanel>
+
+        <!-- TABLERO KANBAN (3 COLUMNAS) -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <!-- Pendientes -->
+                <ColumnDefinition Width="15"/>
+                <!-- Separador -->
+                <ColumnDefinition Width="*"/>
+                <!-- En Proceso -->
+                <ColumnDefinition Width="15"/>
+                <!-- Separador -->
+                <ColumnDefinition Width="*"/>
+                <!-- Finalizadas -->
+            </Grid.ColumnDefinitions>
+
+            <!-- COLUMNA 1: PENDIENTES (Amarillo) -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border BorderBrush="#FFC107" BorderThickness="0,0,0,2" Margin="10,0,10,10">
+                    <TextBlock Text="PENDIENTES" Style="{StaticResource KanbanHeader}" Foreground="#FFC107"/>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly">
+                    <ItemsControl x:Name="ListPendientes">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource KanbanCard}">
+                                    <StackPanel>
+                                        <!-- Info -->
+                                        <TextBlock Text="{Binding Direccion}" Foreground="White" FontWeight="Bold" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Cliente.NombreCompleto}" Foreground="{DynamicResource TextoGris}" FontSize="12"/>
+                                        <TextBlock Text="{Binding FechaDeseada, StringFormat=dd/MM/yyyy}" Foreground="{DynamicResource NeonBrush}" FontSize="11" Margin="0,2,0,5"/>
+
+                                        <!-- Botones Acción -->
+                                        <WrapPanel Orientation="Horizontal">
+                                            <Button Content="▶ INICIAR" Click="btnIniciar_Click" Background="#FFC107" Style="{StaticResource BtnCardAction}" Width="80"/>
+                                            <Button Content="VER DETALLE" Click="btnDetalle_Click" Background="Transparent" Foreground="White" BorderBrush="White" BorderThickness="1" Style="{StaticResource BtnCardAction}"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <!-- COLUMNA 2: EN PROCESO (Neon/Azul) -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border BorderBrush="{DynamicResource NeonBrush}" BorderThickness="0,0,0,2" Margin="10,0,10,10">
+                    <TextBlock Text="EN PROCESO" Style="{StaticResource KanbanHeader}"/>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ListProceso">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!-- Fondo con un tinte Neon suave para destacar que se está trabajando aquí -->
+                                <Border Style="{StaticResource KanbanCard}" BorderBrush="{DynamicResource NeonBrush}" Background="#1AD4FF00">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Direccion}" Foreground="White" FontWeight="Bold" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Cliente.NombreCompleto}" Foreground="{DynamicResource TextoGris}" FontSize="12"/>
+
+                                        <!-- CORRECCIÓN: Solo botones de Finalizar y Detalle -->
+                                        <WrapPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                            <!-- Botón más grande y claro -->
+                                            <Button Content="✓ FINALIZAR TAREA" 
+                                                    Click="btnFinalizar_Click" 
+                                                    Background="{DynamicResource NeonBrush}" 
+                                                    Style="{StaticResource BtnCardAction}" 
+                                                    Width="130"/>
+                                            <!-- Más ancho -->
+
+                                            <Button Content="VER DETALLE" 
+                                                    Click="btnDetalle_Click" 
+                                                    Background="Transparent" 
+                                                    Foreground="White" 
+                                                    BorderBrush="White" 
+                                                    BorderThickness="1" 
+                                                    Style="{StaticResource BtnCardAction}"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- COLUMNA 3: FINALIZADAS (Verde) -->
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border BorderBrush="#00E676" BorderThickness="0,0,0,2" Margin="10,0,10,10">
+                    <TextBlock Text="FINALIZADAS" Style="{StaticResource KanbanHeader}" Foreground="#00E676"/>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ListFinalizadas">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource KanbanCard}" Opacity="0.7">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Direccion}" Foreground="#DDDDDD" TextDecorations="Strikethrough" FontWeight="Bold" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Cliente.NombreCompleto}" Foreground="Gray" FontSize="12"/>
+                                        <TextBlock Text="COMPLETADA" Foreground="#00E676" FontSize="10" FontWeight="Bold" Margin="0,5,0,0"/>
+
+                                        <Button Content="VER DETALLE" Click="btnDetalle_Click" Background="Transparent" Foreground="White" BorderBrush="#444" BorderThickness="1" Style="{StaticResource BtnCardAction}" Margin="0,5,0,0" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>

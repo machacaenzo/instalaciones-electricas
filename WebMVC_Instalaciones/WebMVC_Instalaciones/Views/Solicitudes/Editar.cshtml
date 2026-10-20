@@ -1,0 +1,165 @@
+﻿@model WebMVC_Instalaciones.Models.Solicitud
+
+@{
+    ViewData["Title"] = "Editar Solicitud";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+        <div class="glass-panel glow">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h2 class="title-cyber">EDITAR PEDIDO</h2>
+                    <p class="subtitle-cyber">MODIFICAR DATOS Y EVIDENCIA</p>
+                </div>
+                <a asp-action="Index" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> VOLVER
+                </a>
+            </div>
+
+            <!-- CAMBIO 1: AGREGAR enctype para soportar archivos -->
+            <form asp-action="Editar" method="post" id="formEditar" enctype="multipart/form-data">
+
+                <!-- Campos ocultos necesarios -->
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IdUsuario" />
+                <input type="hidden" asp-for="IdEstadoSolicitud" />
+                <input type="hidden" asp-for="FechaSolicitud" />
+                <input type="hidden" asp-for="Activo" />
+
+                <!-- 1. FOTO DE EVIDENCIA (Visualización + Cambio) -->
+                <div class="mb-4 text-center p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
+                    <span class="input-label mb-2">EVIDENCIA FOTOGRÁFICA</span>
+
+                    <!-- Imagen Actual (Traída de la API) -->
+                    <div class="mb-3">
+                        <img id="imgPreview"
+                             src="https://localhost:7088/api/Solicitudes/@Model.Id/foto"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                             class="img-fluid rounded border border-secondary"
+                             style="max-height: 200px; object-fit: contain;"
+                             alt="Evidencia" />
+
+                        <!-- Placeholder si no hay foto -->
+                        <div class="text-white-50 small fst-italic py-3" style="display:none;">
+                            <i class="bi bi-image text-secondary" style="font-size: 2rem;"></i><br>
+                            Sin evidencia adjunta actualmente
+                        </div>
+                    </div>
+
+                    <!-- Input para cambiarla -->
+                    <div class="input-group-cyber mb-0">
+                        <i class="bi bi-camera text-info"></i>
+                        <input asp-for="ArchivoFoto" type="file" accept="image/*" class="text-white pt-2 w-100" onchange="previewImage(this)" />
+                    </div>
+                    <small class="text-white-50" style="font-size: 0.7rem;">Subir nueva foto reemplazará la anterior.</small>
+                </div>
+
+                <!-- 2. DIRECCIÓN -->
+                <div class="mb-3">
+                    <span class="input-label">DIRECCIÓN / UBICACIÓN</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-geo-alt text-danger"></i>
+                        <input asp-for="Direccion" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Direccion" class="text-danger small fw-bold"></span>
+                </div>
+
+                <!-- 3. FECHA DESEADA -->
+                <div class="mb-3">
+                    <span class="input-label">FECHA PREFERIDA</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-calendar-date text-primary"></i>
+                        <input asp-for="FechaDeseada" type="date" style="color-scheme: dark;" />
+                    </div>
+                    <span asp-validation-for="FechaDeseada" class="text-danger small fw-bold"></span>
+                </div>
+
+                <!-- 4. TIPO DE SERVICIO (Select) -->
+                <div class="mb-3">
+                    <span class="input-label">TIPO DE SERVICIO</span>
+                    <div class="input-group-cyber">
+                        <i class="bi bi-lightning-charge text-warning"></i>
+                        <select id="selectTipo" class="bg-transparent border-0 text-white w-100" style="outline:none; cursor:pointer;">
+                            <option value="[NUEVA OBRA]" class="text-dark">Instalación Nueva / Cableado</option>
+                            <option value="[REPARACIÓN]" class="text-dark">Reparación / Cortocircuito</option>
+                            <option value="[TABLERO]" class="text-dark">Cambio de Tablero / Térmicas</option>
+                            <option value="[ILUMINACIÓN]" class="text-dark">Instalación de Luminarias</option>
+                            <option value="[URGENCIA]" class="text-dark">Urgencia / Sin Luz (24hs)</option>
+                            <option value="[CONSULTA GENERAL]" class="text-dark">Otro / Consulta General</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CAMPO OCULTO REAL -->
+                <input type="hidden" asp-for="Descripcion" id="inputDescripcionReal" />
+
+                <!-- 5. DETALLES (Textarea) -->
+                <div class="mb-4">
+                    <span class="input-label">DETALLES ADICIONALES</span>
+                    <div class="input-group-cyber" style="height: auto; align-items: flex-start; padding-top: 15px;">
+                        <i class="bi bi-card-text text-secondary mt-1"></i>
+                        <textarea id="txtDetalle" rows="3" class="bg-transparent border-0 text-white w-100"
+                                  style="outline:none; resize:none;"></textarea>
+                    </div>
+                    <span asp-validation-for="Descripcion" class="text-danger small fw-bold"></span>
+                </div>
+
+                <button type="submit" class="btn-neon">
+                    GUARDAR CAMBIOS
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.5/localization/messages_es.min.js"></script>
+
+    <script>
+        // 1. CARGA INICIAL: Separar Tipo y Detalle
+        document.addEventListener("DOMContentLoaded", function() {
+            var descripcionCompleta = document.getElementById('inputDescripcionReal').value;
+            var match = descripcionCompleta.match(/^(\[.*?\])\s*(.*)/);
+
+            if (match) {
+                document.getElementById('selectTipo').value = match[1];
+                document.getElementById('txtDetalle').value = match[2];
+            } else {
+                document.getElementById('selectTipo').value = "[CONSULTA GENERAL]";
+                document.getElementById('txtDetalle').value = descripcionCompleta;
+            }
+        });
+
+        // 2. AL ENVIAR: Juntar todo
+        document.getElementById('formEditar').addEventListener('submit', function (e) {
+            var tipo = document.getElementById('selectTipo').value;
+            var detalle = document.getElementById('txtDetalle').value;
+
+            if(tipo === "") tipo = "[CONSULTA GENERAL]";
+
+            document.getElementById('inputDescripcionReal').value = tipo + " " + detalle;
+        });
+
+        // 3. PREVISUALIZAR IMAGEN NUEVA
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = document.getElementById('imgPreview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    // Ocultar placeholder si estaba visible
+                    if(img.nextElementSibling) img.nextElementSibling.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

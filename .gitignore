@@ -1,0 +1,18 @@
+## Visual Studio y .NET (Ignora binarios de compilación en todas las capas: MVC, API, WPF)
+.vs/
+**/[Bb]in/
+**/[Oo]bj/
+**/[Dd]ebug/
+**/[Rr]elease/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Archivos de log y temporales de Base de Datos
+*.ldf
+*.log
+
+## Paquetes NuGet y dependencias cliente
+**/packages/
+**/node_modules/

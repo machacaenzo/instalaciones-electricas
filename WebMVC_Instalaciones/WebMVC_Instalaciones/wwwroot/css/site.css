@@ -1,0 +1,519 @@
+/* =========================================
+   VARIABLES (Paleta Industrial - Cristal Puro)
+   ========================================= */
+:root {
+    --color-fondo: #0a0a0a;
+    /* EL PANEL: Degradado blanco casi invisible (Efecto Lente) */
+    --vidrio-bg: linear-gradient( 135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100% );
+    --vidrio-borde: rgba(255, 255, 255, 0.3);
+    /* CORRECCIÓN INPUTS: Ya no son negros. Son "Vidrio Mate" */
+    /* Blanco al 5% de opacidad. Se ve sutil y moderno. */
+    --input-bg: rgba(255, 255, 255, 0.07);
+    --input-borde: rgba(255, 255, 255, 0.15);
+    /* Neón */
+    --neon-main: #D4FF00;
+    --texto-blanco: #ffffff;
+    --texto-gris: #e0e0e0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-fondo);
+    background-image: url('/img/FomdoIndustrial.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--texto-blanco);
+    min-height: 100vh;
+    display: flex; /* Convierte el body en una columna flexible */
+    flex-direction: column;
+    margin: 0;
+    color: var(--texto-blanco);
+    overflow-x: hidden;
+}
+/* El contenido empuja el footer hacia abajo */
+main {
+    flex: 1;
+}
+    /* Viñeteado suave para centrar la atención (sin oscurecer toda la foto) */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.7) 100%);
+        z-index: -1;
+    }
+
+/* =========================================
+   PANEL DE VIDRIO
+   ========================================= */
+.glass-panel {
+    background: var(--vidrio-bg);
+    backdrop-filter: blur(20px); /* Blur fuerte para suavizar el fondo */
+    -webkit-backdrop-filter: blur(20px);
+    /* Bordes brillantes (Luz) */
+    border: 1px solid var(--vidrio-borde);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); /* Sombra difusa */
+
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    position: relative;
+}
+
+/* =========================================
+   INPUTS (Estilo Vidrio Mate)
+   ========================================= */
+.input-label {
+    font-size: 0.7rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.input-group-cyber {
+    background-color: var(--input-bg); /* Ahora es claro translúcido */
+    border: 1px solid var(--input-borde);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    height: 50px;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+}
+
+    .input-group-cyber:focus-within {
+        border-color: var(--neon-main);
+        background-color: rgba(255, 255, 255, 0.15); /* Se ilumina un poco al escribir */
+        box-shadow: 0 0 15px rgba(212, 255, 0, 0.2);
+    }
+
+    .input-group-cyber i {
+        color: #ddd; /* Icono claro */
+        font-size: 1.2rem;
+        margin-right: 12px;
+    }
+
+    .input-group-cyber input {
+        background: transparent;
+        border: none;
+        color: white;
+        width: 100%;
+        outline: none;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+        .input-group-cyber input::placeholder {
+            color: rgba(255,255,255, 0.5);
+        }
+
+/* =========================================
+   BOTÓN Y TÍTULOS
+   ========================================= */
+h2.title-cyber {
+    color: white;
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.subtitle-cyber {
+    color: #eee;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.btn-neon {
+    background-color: var(--neon-main);
+    color: #000;
+    font-weight: 800;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    width: 100%;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.2s;
+}
+
+    .btn-neon:hover {
+        background-color: #e6ff66;
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(212, 255, 0, 0.6);
+    }
+
+.link-cyber {
+    color: white;
+    opacity: 0.9;
+    text-decoration: none;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 3px black;
+}
+
+    .link-cyber:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+/* =========================================
+   SWEETALERT PERSONALIZADO (CYBER STYLE)
+   ========================================= */
+
+/* El contenedor de la alerta */
+.cyber-alert-popup {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 0 40px rgba(212, 255, 0, 0.1) !important; /* Resplandor suave */
+    font-family: 'Inter', sans-serif !important;
+}
+
+    /* Si es error, borde rojo */
+    .cyber-alert-popup.border-danger {
+        border: 1px solid #ff4444 !important;
+        box-shadow: 0 0 40px rgba(255, 68, 68, 0.1) !important;
+    }
+
+/* El título */
+.swal2-title {
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.5rem !important;
+}
+
+/* El botón de confirmar */
+.swal2-confirm {
+    box-shadow: 0 0 15px rgba(212, 255, 0, 0.4) !important; /* Brillo neón */
+    border-radius: 50px !important; /* Redondo */
+}
+
+/* Icono de éxito (cambiar el verde por defecto a nuestro neón) */
+.swal2-success-ring {
+    border-color: rgba(212, 255, 0, 0.3) !important;
+}
+
+.swal2-success-line-tip, .swal2-success-line-long {
+    background-color: #D4FF00 !important;
+}
+
+/* =========================================
+   ESTILO ESPECIAL: BIENVENIDA (SYSTEM ONLINE)
+   ========================================= */
+.cyber-welcome-popup {
+    background-color: #050505 !important;
+    border: 1px solid rgba(212, 255, 0, 0.3) !important; /* Borde verde neón sutil */
+    box-shadow: 0 0 60px rgba(212, 255, 0, 0.15) !important; /* Resplandor grande */
+}
+
+.cyber-welcome-title {
+    color: white !important;
+    font-size: 2rem !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5) !important;
+}
+
+.cyber-welcome-btn {
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    color: black !important;
+    padding: 15px 40px !important;
+}
+
+
+/* =========================================
+   ADMIN PANEL (Sidebar y Tablas)
+   ========================================= */
+
+/* El contenedor principal que divide la pantalla en 2 */
+.admin-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* SIDEBAR (Menú Lateral) */
+.sidebar {
+    width: 260px;
+    background: rgba(5, 5, 5, 0.95); /* Casi negro sólido */
+    border-right: 1px solid var(--vidrio-borde);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Fijo a la izquierda */
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu {
+    padding: 1rem 0;
+    flex-grow: 1;
+}
+
+.nav-link-admin {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: var(--texto-gris);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-left: 3px solid transparent;
+}
+
+    .nav-link-admin:hover, .nav-link-admin.active {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        border-left-color: var(--neon-main); /* Borde verde al pasar el mouse */
+    }
+
+    .nav-link-admin i {
+        font-size: 1.2rem;
+        margin-right: 15px;
+        width: 20px;
+        text-align: center;
+    }
+
+/* CONTENIDO DEL ADMIN (A la derecha del sidebar) */
+/* =========================================
+   ADMIN PANEL (Sidebar Flotante & Tablas)
+   ========================================= */
+
+.admin-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    /* Fondo oscuro ya definido en body, pero aseguramos */
+}
+
+/* SIDEBAR FLOTANTE (Estilo "Phone UI" de la imagen) */
+.sidebar {
+    /* Posición fija y flotante (con márgenes) */
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    bottom: 20px;
+    width: 280px;
+    z-index: 1000;
+    /* Estilo Vidrio (El mismo del Login) */
+    background: var(--vidrio-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    /* Bordes brillantes */
+    border: 1px solid var(--vidrio-borde);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px; /* Muy redondeado */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+/* Título del Sidebar */
+.sidebar-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-title {
+    color: var(--neon-main);
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(212, 255, 0, 0.3);
+}
+
+/* MENÚ (Botones) */
+.sidebar-menu {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre botones */
+}
+
+.nav-link-admin {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    border-radius: 50px; /* Forma de píldora */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+    .nav-link-admin i {
+        font-size: 1.2rem;
+        margin-right: 15px;
+        width: 24px;
+        text-align: center;
+    }
+
+    /* ESTADO ACTIVO (La píldora amarilla de la imagen) */
+    .nav-link-admin.active {
+        background-color: var(--neon-main);
+        color: #000; /* Texto negro sobre neón */
+        font-weight: 800;
+        box-shadow: 0 0 20px rgba(212, 255, 0, 0.4);
+        transform: translateX(5px); /* Se mueve un poquito a la derecha */
+    }
+
+    /* Hover (cuando no está activo) */
+    .nav-link-admin:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+/* PERFIL ABAJO */
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* CONTENIDO A LA DERECHA */
+.admin-content {
+    margin-left: 320px; /* Ancho sidebar + margen */
+    padding: 2rem;
+    width: calc(100% - 320px);
+}
+
+/* --- MANTENEMOS LA TABLA QUE TE GUSTÓ --- */
+.table-cyber {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+    .table-cyber thead th {
+        color: var(--texto-gris);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0 1rem 1rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .table-cyber tbody tr {
+        background: rgba(255, 255, 255, 0.03); /* Fila translúcida */
+        transition: all 0.2s;
+    }
+
+        .table-cyber tbody tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.005);
+        }
+
+    .table-cyber td {
+        padding: 1rem;
+        color: white;
+        vertical-align: middle;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+        .table-cyber td:first-child {
+            border-radius: 10px 0 0 10px;
+            border-left: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .table-cyber td:last-child {
+            border-radius: 0 10px 10px 0;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+/* Botón de Cancelar en las Alertas */
+.cyber-cancel-btn {
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 50px !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s ease;
+}
+
+    .cyber-cancel-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-color: white !important;
+    }
+
+
+
+
+/* =========================================
+   RESPONSIVE DESIGN (MÓVIL)
+   ========================================= */
+@media (max-width: 991px) {
+
+    .admin-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative; /* Deja de flotar */
+        width: 100%;
+        top: 0;
+        left: 0;
+        bottom: auto;
+        border-radius: 0 0 20px 20px;
+        margin-bottom: 20px;
+        padding: 1rem;
+        z-index: 1000;
+        /* IMPORTANTE: Altura automática para que el collapse funcione */
+        height: auto !important;
+        min-height: auto !important;
+    }
+
+    /* Ajuste para que el menú colapsado ocupe el ancho */
+    .sidebar-menu {
+        margin-top: 1rem;
+    }
+
+    /* El contenido baja */
+    .admin-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+/* Navbar estilo Glass */
+.navbar {
+    background: rgba(10, 10, 10, 0.8) !important; /* Fondo negro semi-transparente */
+    backdrop-filter: blur(10px); /* Efecto vidrio */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Línea sutil abajo */
+}
+
+/* ARREGLO PARA LOS SELECTS EN MODO OSCURO */
+select option {
+    background-color: #1a1a1a; /* Fondo gris oscuro */
+    color: #ffffff; /* Texto blanco */
+    padding: 10px;
+}
+
+/* Para navegadores que soportan styling avanzado */
+select {
+    color-scheme: dark;
+}
